@@ -74,6 +74,16 @@ public class MessageBoxController : MonoBehaviour
 
     public void CloseText ()
     {
-        Destroy(this.gameObject);
+        ResetText();
+        gameObject.SetActive(false);
+    }
+
+    private void ResetText ()
+    {
+        currentIndex = 0;
+        textMesh.text = messages[currentIndex];
+        nextBtn.SetActive(true);
+        previousBtn.SetActive(false);
+        closeBtn.SetActive(false);
     }
 }

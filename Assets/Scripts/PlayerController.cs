@@ -14,17 +14,24 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float speed = 5f;
 
+    [SerializeField]
+    private ContactFilter2D interactableFilter;
+
     private void Awake ()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<CircleCollider2D>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         movementVector.x = Input.GetAxisRaw("Horizontal");
         movementVector.y = Input.GetAxisRaw("Vertical");
+
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+        {
+            InteractableCheck();
+        }
     }
 
     private void FixedUpdate ()
@@ -41,5 +48,26 @@ public class PlayerController : MonoBehaviour
     public void ForceMove (Vector2 direction, float speed)
     {
         PerformMovement(direction, speed);
+    }
+
+    private void InteractableCheck ()
+    {
+        Interactable obj = null;
+        List<Collider2D> lc = new List<Collider2D>();
+        if (col.GetContacts(interactableFilter, lc) > 0)
+        {
+            foreach (Collider2D collisor in lc)
+            {
+                if (collisor != null && collisor.CompareTag("Interactable"))
+                {
+                    obj = collisor.GetComponent<Interactable>();
+                    break;
+                }
+            }
+            if (obj != null)
+            {
+                obj.Interact();
+            }
+        }
     }
 }
