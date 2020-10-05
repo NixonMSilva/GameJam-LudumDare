@@ -15,13 +15,14 @@ public class InteractableController : MonoBehaviour
     public int eventIndex = 0;
 
     private int noMessages, currentMessage;
-    private EventController eventController;
+
+    private GameObject eventController;
 
     private void Awake ()
     {
         currentMessage = 0;
         noMessages = messageBoxes.Length;
-        eventController = new EventController();
+        eventController = GameObject.FindGameObjectWithTag("EventController");
     }
 
     public void ShowMessage ()
@@ -36,7 +37,7 @@ public class InteractableController : MonoBehaviour
 
     public void PropagateEffect ()
     {
-        eventController.FireEvent(eventIndex);
+        eventController.GetComponent<EventController>().FireEvent(eventIndex);
     }
 
     IEnumerator MessageDelay (float delay)

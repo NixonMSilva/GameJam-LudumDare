@@ -11,6 +11,7 @@ public class MainMenuController : MonoBehaviour
     public void PlayGame ()
     {
         Debug.Log("Play game");
+        SceneManager.LoadScene("Dream01");
         Time.timeScale = 1f;
     }
 

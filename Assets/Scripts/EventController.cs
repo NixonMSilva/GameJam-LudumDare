@@ -1,18 +1,26 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EventController : MonoBehaviour
 {
+    public static EventController current;
+
+    private void Awake ()
+    {
+        current = this;
+    }
+
     public void FireEvent (int index)
     {
         switch (index)
         {
             case 1:
-                FireEvent01();
+                onLightSwitch01();
                 break;
             case 2:
-                FireEvent02();
+                sendToLevel02();
                 break;
             default:
                 FireEventDefault();
@@ -20,14 +28,23 @@ public class EventController : MonoBehaviour
         }
     }
 
-    void FireEvent01 ()
-    {
+    public event Action onLightSwitch01;
+    public event Action sendToLevel02;
 
+    public void LightSwitch01 ()
+    {
+        if (onLightSwitch01 != null)
+        {
+            onLightSwitch01();
+        }
     }
 
-    void FireEvent02 ()
+    public void SendToLevel02 ()
     {
-
+        if (sendToLevel02 != null)
+        {
+            sendToLevel02();
+        }
     }
 
     void FireEventDefault ()

@@ -17,14 +17,24 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private ContactFilter2D interactableFilter;
 
+    private Animator anim;
+
     private void Awake ()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<CircleCollider2D>();
+        anim = GetComponent<Animator>();
+        movementVector = Vector2.zero;
     }
 
     private void Update()
     {
+        // Setting animator properties
+        anim.SetFloat("horizontal", movementVector.x);
+        anim.SetFloat("vertical", movementVector.y);
+        anim.SetFloat("speed", movementVector.magnitude);
+
+        // Analyzing directional input
         movementVector.x = Input.GetAxisRaw("Horizontal");
         movementVector.y = Input.GetAxisRaw("Vertical");
 

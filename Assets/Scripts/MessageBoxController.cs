@@ -20,20 +20,40 @@ public class MessageBoxController : MonoBehaviour
 
     private string currentText;
 
+    public bool fireEventUponClose = false;
+    public int eventToFire;
+
+    private GameObject eventController;
+
     private void Awake ()
     {
         noMessages = messages.Length;
+        Initialization();
+        if (fireEventUponClose)
+        {
+            eventController = GameObject.FindGameObjectWithTag("EventController");
+        }
+    }
+
+    private void Initialization ()
+    {
         if (noMessages > 0)
         {
             textMesh = messageBoxText.GetComponent<TextMeshProUGUI>();
-            /* foreach (string txt in messages)
-            {
-                Debug.Log(txt);
-            } */
             currentText = messages[currentIndex];
             textMesh.text = currentText;
-            previousBtn.SetActive(false);
-            closeBtn.SetActive(false);
+            if (noMessages == 1)
+            {
+                nextBtn.SetActive(false);
+                previousBtn.SetActive(false);
+                closeBtn.SetActive(true);
+            }
+            else
+            {
+                previousBtn.SetActive(false);
+                closeBtn.SetActive(false);
+            }
+            Time.timeScale = 0f;
         }
     }
 
@@ -75,6 +95,11 @@ public class MessageBoxController : MonoBehaviour
 
     public void CloseText ()
     {
+        if (fireEventUponClose)
+        {
+            eventController.GetComponent<EventController>().FireEvent(eventToFire);
+        }
+
         if (destroyOnClose)
         {
             Destroy(this.gameObject);
@@ -84,14 +109,18 @@ public class MessageBoxController : MonoBehaviour
             ResetText();
             gameObject.SetActive(false);
         }
+        Time.timeScale = 1f;
     }
 
     private void ResetText ()
     {
         currentIndex = 0;
         textMesh.text = messages[currentIndex];
-        nextBtn.SetActive(true);
-        previousBtn.SetActive(false);
-        closeBtn.SetActive(false);
+        Initialization();
+    }
+
+    public void SetEventController (GameObject ec)
+    {
+        eventController = ec;
     }
 }
