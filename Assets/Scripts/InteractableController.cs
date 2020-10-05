@@ -6,18 +6,22 @@ public class InteractableController : MonoBehaviour
 {
 
     /* The message box attached to this object, 
-     * it's a vector it can be scaled for more
+     * it's an array - it can be scaled for more
      * boxes appearing per object.    
     */
 
     public GameObject[] messageBoxes;
 
+    public int eventIndex = 0;
+
     private int noMessages, currentMessage;
+    private EventController eventController;
 
     private void Awake ()
     {
         currentMessage = 0;
         noMessages = messageBoxes.Length;
+        eventController = new EventController();
     }
 
     public void ShowMessage ()
@@ -32,7 +36,7 @@ public class InteractableController : MonoBehaviour
 
     public void PropagateEffect ()
     {
-        Debug.Log("Effect propagated!");
+        eventController.FireEvent(eventIndex);
     }
 
     IEnumerator MessageDelay (float delay)
