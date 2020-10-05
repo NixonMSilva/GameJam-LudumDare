@@ -12,6 +12,8 @@ public class MessageBoxController : MonoBehaviour
 
     public GameObject previousBtn, nextBtn, closeBtn;
 
+    public bool destroyOnClose = false;
+
     private TextMeshProUGUI textMesh;
 
     private int noMessages;
@@ -74,8 +76,15 @@ public class MessageBoxController : MonoBehaviour
 
     public void CloseText ()
     {
-        ResetText();
-        gameObject.SetActive(false);
+        if (destroyOnClose)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            ResetText();
+            gameObject.SetActive(false);
+        }
     }
 
     private void ResetText ()
